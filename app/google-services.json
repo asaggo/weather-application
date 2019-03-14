@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "102663994054",
+    "firebase_url": "https://weather-application-1766c.firebaseio.com",
+    "project_id": "weather-application-1766c",
+    "storage_bucket": "weather-application-1766c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:102663994054:android:5f75a84fb23511b4",
+        "android_client_info": {
+          "package_name": "com.application.jessiejay.weatherapplicationv101"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "102663994054-4qgj56s675s0ht0f9uich9vo84l4lcfd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyByeKDBoma9dzcV2BoNiRFVpnfAEV22pXI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+    <!-- Layout to contain contents of main body of screen (drawer will slide over this) -->
+    <FrameLayout
+        android:id="@+id/content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
+
+    <!-- Container for contents of drawer - use NavigationView to make configuration easier -->
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:menu="@menu/drawer_view"/>
+
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity">
+
+        <TextView
+            android:id="@+id/city_name_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="city name"
+            app:layout_constraintLeft_toRightOf="@id/guideline"
+            app:layout_constraintRight_toLeftOf="@+id/guideline"/>
+
+        <TextView
+            android:id="@+id/current_time_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="current time"
+            app:layout_constraintLeft_toRightOf="@id/guideline"
+            app:layout_constraintRight_toLeftOf="@+id/guideline"
+            app:layout_constraintTop_toBottomOf="@id/city_name_textview"/>
+
+        <TextView
+            android:id="@+id/temp_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="temp"
+            app:layout_constraintLeft_toRightOf="@id/guideline"
+            app:layout_constraintRight_toLeftOf="@+id/guideline"
+            app:layout_constraintTop_toBottomOf="@id/current_time_textview"/>
+
+        <TextView
+            android:id="@+id/temp_min_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="temp min"
+            app:layout_constraintLeft_toRightOf="@id/guideline"
+            app:layout_constraintRight_toLeftOf="@+id/guideline"
+            app:layout_constraintTop_toBottomOf="@id/temp_textview"/>
+
+        <android.support.constraint.Guideline
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/guideline"
+            app:layout_constraintGuide_percent="0.5"
+            android:orientation="vertical"/>
+
+    </android.support.constraint.ConstraintLayout>
+</android.support.v4.widget.DrawerLayout>

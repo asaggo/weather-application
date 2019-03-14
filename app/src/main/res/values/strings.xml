@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Weather Application V 1.0.1</string>
+    <string name="username_textview">Username</string>
+    <string name="password_textview">Password</string>
+    <string name="login_button">Log In</string>
+    <string name="logout">Log Out</string>
+    <string name="signup_button">Sign Up</string>
+    <string name="signup_submit_button">Submit</string>
+    <string name="name_textview">Name</string>
+    <string name="country_textview">Country</string>
+    <string name="state_textview">State</string>
+    <string name="city_textview">City</string>
+</resources>
