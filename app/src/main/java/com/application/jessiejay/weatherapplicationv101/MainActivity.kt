@@ -1,24 +1,26 @@
 package com.application.jessiejay.weatherapplicationv101
 
-import android.arch.lifecycle.ViewModelProvider
+import android.Manifest
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
+import android.location.LocationManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.NavigationView
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBar
 import android.support.v7.widget.Toolbar
-import android.util.Log
 import android.view.MenuItem
-import android.view.View
-import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import kotlinx.android.synthetic.main.activity_main.*
-import org.w3c.dom.Text
+import com.google.firebase.auth.FirebaseAuth
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -29,24 +31,42 @@ class MainActivity : AppCompatActivity(), LocationListener {
      companion object {
         val baseUrl = "http://api.openweathermap.org/"
         val appid = "319af09ba07aabb7b53de35862c73840"
-        val lat = "40.370104"
-        val lon = "-111.781541"
         val TAG = "MyActivity"
     }
+
+    //default values : seattle, Fahrenheit
+    private var lat = "47.618503"
+    private var lon = "-122.315176"
+    private var unit = "imperial"
+
     private lateinit var viewModel: WeatherViewModel
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navigationView: NavigationView
+    private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var locationManager: LocationManager
+//    private lateinit var locationTextView: TextView
+    private lateinit var currentCityName: TextView
+    private lateinit var currentDateTime: TextView
+    private lateinit var currentTemp: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+//        locationTextView = findViewById(R.id.current_location)
+        currentCityName = findViewById(R.id.city_name_textview)
+        currentDateTime = findViewById(R.id.current_time_textview)
+        currentTemp = findViewById(R.id.temp_textview)
+
         viewModel = ViewModelProviders.of(this).get(WeatherViewModel::class.java)
         val database = DatabaseHelper(this)
-
+        firebaseAuth = FirebaseAuth.getInstance()
+        val permissionCheck = ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.ACCESS_FINE_LOCATION)
+        if(permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 700)
+        }
+        getLocation()
         getCurrentData()
-//        val textView = findViewById<TextView>(R.id.textview)
-//        val submit_btn = findViewById<Button>(R.id.submit_btn)
-//        submit_btn.setOnClickListener(View.OnClickListener { getCurrentData() })
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -59,6 +79,14 @@ class MainActivity : AppCompatActivity(), LocationListener {
         drawerLayout = findViewById(R.id.drawer_layout)
         navigationView = findViewById(R.id.nav_view)
         navigationView.setNavigationItemSelectedListener { menuItem ->
+            menuItem.isChecked = true
+            drawerLayout.closeDrawers()
+            when(menuItem.itemId){
+                R.id.drawer_logout ->{
+                    firebaseAuth.signOut()
+                    finish()
+                }
+            }
             true
         }
     }
@@ -73,10 +101,20 @@ class MainActivity : AppCompatActivity(), LocationListener {
         }
     }
 
+    fun getLocation() {
+        try {
+            locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5.toFloat(), this)
+        } catch (e: SecurityException) {
+            e.printStackTrace()
+        }
+
+    }
+
     fun getCurrentData() {
         val retrofit = Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create()).build()
         val service: WeatherService = retrofit.create(WeatherService::class.java)
-        val call = service.getCurrentWeatherInfo(lat,lon,appid)
+        val call = service.getCurrentWeatherInfo(lat,lon,appid,unit)
         //add spinner
         call.enqueue(object: Callback<WeatherResponse> {
             override fun onResponse(call: Call<WeatherResponse>?, response: Response<WeatherResponse>?) {
@@ -95,16 +133,16 @@ class MainActivity : AppCompatActivity(), LocationListener {
     }
 
     fun displayWeather() {
-        val cityNameTextView = findViewById<TextView>(R.id.city_name_textview)
-        cityNameTextView.text = viewModel.cityName
-        val currentDateTime = findViewById<TextView>(R.id.current_time_textview)
+        currentCityName.text = viewModel.cityName
         currentDateTime.text = viewModel.currentTime_str
-        val temp = findViewById<TextView>(R.id.temp_textview)
-        temp.text = viewModel.temp.toString()
+        currentTemp.text = viewModel.temp.toString()
 
     }
     override fun onLocationChanged(location: Location?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+//        locationTextView.setText("Current Location: " + location?.latitude + ", " + location?.longitude)
+        lat = location?.latitude.toString()
+        lon = location?.longitude.toString()
+        getCurrentData()
     }
 
     override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
@@ -113,10 +151,12 @@ class MainActivity : AppCompatActivity(), LocationListener {
 
     override fun onProviderEnabled(provider: String?) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
     }
 
     override fun onProviderDisabled(provider: String?) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        Toast.makeText(applicationContext, "Please Enable GPS and Internet", Toast.LENGTH_SHORT).show()
     }
 
 

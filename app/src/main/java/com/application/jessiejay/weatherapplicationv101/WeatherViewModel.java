@@ -38,4 +38,5 @@ public class WeatherViewModel extends ViewModel {
         this.temp_max = weatherResponse.main.temp_max;
         this.windSpeed = weatherResponse.wind.speed;
     }
+
 }
