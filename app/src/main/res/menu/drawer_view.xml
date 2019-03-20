@@ -7,9 +7,9 @@
             android:icon="@drawable/ic_arrow_back_black_24dp"
             android:title="@string/logout" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/drawer_settings"
             android:icon="@drawable/ic_android_black_24dp"
-            android:title="@string/test_item" />
+            android:title="@string/settings" />
         <!--<item-->
             <!--android:id="@+id/nav_slideshow"-->
             <!--android:icon="@drawable/ic_menu_slideshow"-->

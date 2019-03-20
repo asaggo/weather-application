@@ -28,16 +28,20 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity(), LocationListener {
-     companion object {
+    companion object {
         val baseUrl = "http://api.openweathermap.org/"
         val appid = "319af09ba07aabb7b53de35862c73840"
         val TAG = "MyActivity"
+        val CELSIUS_UNIT_API = "metric"
+        val CELSIUS_UNIT_TEXT = "°C"
+        val FAHRENHEIT_UNIT_API = "imperial"
+        val FAHRENHEIT_UNIT_TEXT = "°F"
     }
 
     //default values : seattle, Fahrenheit
     private var lat = "47.618503"
     private var lon = "-122.315176"
-    private var unit = "imperial"
+    private var unit = FAHRENHEIT_UNIT_API
 
     private lateinit var viewModel: WeatherViewModel
     private lateinit var drawerLayout: DrawerLayout
@@ -48,6 +52,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
     private lateinit var currentCityName: TextView
     private lateinit var currentDateTime: TextView
     private lateinit var currentTemp: TextView
+    private lateinit var tempUnitText: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,6 +62,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
         currentCityName = findViewById(R.id.city_name_textview)
         currentDateTime = findViewById(R.id.current_time_textview)
         currentTemp = findViewById(R.id.temp_textview)
+        tempUnitText = findViewById(R.id.temp_unit_textview)
 
         viewModel = ViewModelProviders.of(this).get(WeatherViewModel::class.java)
         val database = DatabaseHelper(this)
@@ -85,6 +91,9 @@ class MainActivity : AppCompatActivity(), LocationListener {
                 R.id.drawer_logout ->{
                     firebaseAuth.signOut()
                     finish()
+                }
+                R.id.drawer_settings ->{
+
                 }
             }
             true
@@ -136,6 +145,11 @@ class MainActivity : AppCompatActivity(), LocationListener {
         currentCityName.text = viewModel.cityName
         currentDateTime.text = viewModel.currentTime_str
         currentTemp.text = viewModel.temp.toString()
+        if(unit.equals(FAHRENHEIT_UNIT_API)){
+            tempUnitText.text = FAHRENHEIT_UNIT_TEXT
+        } else {
+            tempUnitText.text = CELSIUS_UNIT_TEXT
+        }
 
     }
     override fun onLocationChanged(location: Location?) {
