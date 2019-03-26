@@ -18,6 +18,7 @@ import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBar
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
@@ -53,6 +54,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
     private lateinit var currentDateTime: TextView
     private lateinit var currentTemp: TextView
     private lateinit var tempUnitText: TextView
+    private lateinit var changeUnitBtn: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,6 +65,17 @@ class MainActivity : AppCompatActivity(), LocationListener {
         currentDateTime = findViewById(R.id.current_time_textview)
         currentTemp = findViewById(R.id.temp_textview)
         tempUnitText = findViewById(R.id.temp_unit_textview)
+        changeUnitBtn = findViewById(R.id.change_unit_button)
+        changeUnitBtn.setOnClickListener {
+            if(changeUnitBtn.text.equals(FAHRENHEIT_UNIT_TEXT)){
+                unit = FAHRENHEIT_UNIT_API
+                changeUnitBtn.text = CELSIUS_UNIT_TEXT
+            } else {
+                unit = CELSIUS_UNIT_API
+                changeUnitBtn.text = FAHRENHEIT_UNIT_TEXT
+            }
+            getCurrentData()
+        }
 
         viewModel = ViewModelProviders.of(this).get(WeatherViewModel::class.java)
         val database = DatabaseHelper(this)
@@ -91,10 +104,15 @@ class MainActivity : AppCompatActivity(), LocationListener {
                 R.id.drawer_logout ->{
                     firebaseAuth.signOut()
                     finish()
+                    val intent = Intent(applicationContext, loginActivity::class.java)
+                    startActivity(intent)
                 }
-                R.id.drawer_settings ->{
-
-                }
+//                R.id.drawer_settings ->{
+//                    val intent = Intent(applicationContext, SettingsActivity::class.java)
+//                    startActivity(intent)
+//                    settingsFragment = SettingsFragment()
+//                    supportFragmentManager.beginTransaction().replace(R.id.settings_fragment,settingsFragment).commit()
+//                }
             }
             true
         }
@@ -147,8 +165,10 @@ class MainActivity : AppCompatActivity(), LocationListener {
         currentTemp.text = viewModel.temp.toString()
         if(unit.equals(FAHRENHEIT_UNIT_API)){
             tempUnitText.text = FAHRENHEIT_UNIT_TEXT
+//            changeUnitBtn.text = CELSIUS_UNIT_TEXT
         } else {
             tempUnitText.text = CELSIUS_UNIT_TEXT
+//            changeUnitBtn.text = FAHRENHEIT_UNIT_TEXT
         }
 
     }
@@ -160,17 +180,13 @@ class MainActivity : AppCompatActivity(), LocationListener {
     }
 
     override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun onProviderEnabled(provider: String?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-
     }
 
     override fun onProviderDisabled(provider: String?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        Toast.makeText(applicationContext, "Please Enable GPS and Internet", Toast.LENGTH_SHORT).show()
+         Toast.makeText(applicationContext, "Please Enable GPS and Internet", Toast.LENGTH_SHORT).show()
     }
 
 

@@ -33,7 +33,6 @@
         android:layout_height="match_parent"
         tools:context=".MainActivity">
 
-
         <TextView
             android:paddingTop="?attr/actionBarSize"
             android:id="@+id/city_name_textview"
@@ -77,6 +76,16 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/temp_min_textview"
             app:layout_constraintLeft_toRightOf="@id/temp_textview"
+            app:layout_constraintTop_toBottomOf="@id/current_time_textview"
+            android:layout_marginLeft="10dp"/>
+
+        <Button
+            android:id="@+id/change_unit_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/celsius_unit"
+            app:layout_constraintBottom_toTopOf="@+id/temp_min_textview"
+            app:layout_constraintLeft_toRightOf="@id/temp_unit_textview"
             app:layout_constraintTop_toBottomOf="@id/current_time_textview"
             android:layout_marginLeft="10dp"/>
 

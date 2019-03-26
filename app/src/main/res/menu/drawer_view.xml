@@ -1,22 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <group>
-        <!--android:checkableBehavior="single"-->
+    <group
+        android:checkableBehavior="single">
         <item
             android:id="@+id/drawer_logout"
             android:icon="@drawable/ic_arrow_back_black_24dp"
             android:title="@string/logout" />
-        <item
-            android:id="@+id/drawer_settings"
-            android:icon="@drawable/ic_android_black_24dp"
-            android:title="@string/settings" />
         <!--<item-->
-            <!--android:id="@+id/nav_slideshow"-->
-            <!--android:icon="@drawable/ic_menu_slideshow"-->
-            <!--android:title="@string/slideshow" />-->
-        <!--<item-->
-            <!--android:id="@+id/nav_manage"-->
-            <!--android:icon="@drawable/ic_menu_manage"-->
-            <!--android:title="@string/tools" />-->
+            <!--android:id="@+id/drawer_settings"-->
+            <!--android:icon="@drawable/ic_android_black_24dp"-->
+            <!--android:title="@string/settings" />-->
     </group>
 </menu>
