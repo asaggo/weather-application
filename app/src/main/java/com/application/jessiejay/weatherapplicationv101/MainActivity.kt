@@ -128,7 +128,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
         }
     }
 
-    fun getLocation() {
+    private fun getLocation() {
         try {
             locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5.toFloat(), this)
@@ -138,7 +138,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
 
     }
 
-    fun getCurrentData() {
+    private fun getCurrentData() {
         val retrofit = Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create()).build()
         val service: WeatherService = retrofit.create(WeatherService::class.java)
         val call = service.getCurrentWeatherInfo(lat,lon,appid,unit)
@@ -159,21 +159,19 @@ class MainActivity : AppCompatActivity(), LocationListener {
         })
     }
 
-    fun displayWeather() {
+    private fun displayWeather() {
         currentCityName.text = viewModel.cityName
         currentDateTime.text = viewModel.currentTime_str
         currentTemp.text = viewModel.temp.toString()
         if(unit.equals(FAHRENHEIT_UNIT_API)){
             tempUnitText.text = FAHRENHEIT_UNIT_TEXT
-//            changeUnitBtn.text = CELSIUS_UNIT_TEXT
         } else {
             tempUnitText.text = CELSIUS_UNIT_TEXT
-//            changeUnitBtn.text = FAHRENHEIT_UNIT_TEXT
         }
 
     }
+
     override fun onLocationChanged(location: Location?) {
-//        locationTextView.setText("Current Location: " + location?.latitude + ", " + location?.longitude)
         lat = location?.latitude.toString()
         lon = location?.longitude.toString()
         getCurrentData()
@@ -186,7 +184,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
     }
 
     override fun onProviderDisabled(provider: String?) {
-         Toast.makeText(applicationContext, "Please Enable GPS and Internet", Toast.LENGTH_SHORT).show()
+         Toast.makeText(applicationContext, getString(R.string.enable_gps_and_internet), Toast.LENGTH_SHORT).show()
     }
 
 

@@ -7,6 +7,7 @@ import android.widget.EditText
 import android.widget.Toast
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 
 class signupActivity : AppCompatActivity() {
 
@@ -33,6 +34,7 @@ class signupActivity : AppCompatActivity() {
                 val password = mPassword.text.toString().trim()
                 firebaseAuth.createUserWithEmailAndPassword(username,password).addOnCompleteListener { task ->
                     if (task.isSuccessful){
+                        sendUserData()
                         Toast.makeText(this.applicationContext, "Registered successfully",Toast.LENGTH_SHORT).show()
                         finish()
                     } else {
@@ -47,5 +49,21 @@ class signupActivity : AppCompatActivity() {
 
     private fun validateInput() : Boolean {
         return !mUsername.text.isEmpty() && !mPassword.text.isEmpty() && !mName.text.isEmpty()
+    }
+
+    private fun sendUserData(){
+        val firebaseDatabase = FirebaseDatabase.getInstance()
+        val reference = firebaseDatabase.getReference(firebaseAuth.uid!!)
+        val user = User(mName.text.toString())
+        reference.setValue(user)
+    }
+
+    private fun sendEmailVerification(){
+        val firebaseUser = firebaseAuth.currentUser
+        if(firebaseUser!=null) {
+            firebaseUser.sendEmailVerification().addOnCompleteListener({
+                
+            })
+        }
     }
 }

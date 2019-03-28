@@ -14,4 +14,6 @@
     <string name="settings">Settings</string>
     <string name="settings_toolbar">Settings</string>
     <string name="celsius_unit">°C</string>
+    <string name="verify_your_email">Please verify your email</string>
+    <string name="enable_gps_and_internet">Please Enable GPS and Internet</string>
 </resources>
