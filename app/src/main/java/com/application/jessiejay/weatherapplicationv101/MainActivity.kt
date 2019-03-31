@@ -21,7 +21,6 @@ import android.view.MenuItem
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import com.google.android.gms.location.places.ui.PlacePicker
 import com.google.firebase.auth.FirebaseAuth
 import retrofit2.Call
 import retrofit2.Callback
@@ -38,8 +37,6 @@ class MainActivity : AppCompatActivity(), LocationListener {
         val CELSIUS_UNIT_TEXT = "°C"
         val FAHRENHEIT_UNIT_API = "imperial"
         val FAHRENHEIT_UNIT_TEXT = "°F"
-
-        val REQUEST_CODE = 1
     }
 
     //default values : seattle, Fahrenheit
@@ -117,16 +114,12 @@ class MainActivity : AppCompatActivity(), LocationListener {
 //                    supportFragmentManager.beginTransaction().replace(R.id.settings_fragment,settingsFragment).commit()
 //                }
                 R.id.drawer_map ->{
-                                   }
+
+                }
             }
             true
         }
 
-        val button = findViewById<Button>(R.id.temp_button)
-        button.setOnClickListener {
-            val builder = PlacePicker.IntentBuilder()
-            startActivityForResult(builder.build(this), REQUEST_CODE)
-        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {

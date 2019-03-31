@@ -16,7 +16,6 @@
     <string name="celsius_unit">°C</string>
     <string name="verify_your_email">Please verify your email</string>
     <string name="enable_gps_and_internet">Please Enable GPS and Internet</string>
-    <string name="title_activity_maps">Map</string>
     <string name="find_place">Find place</string>
     <string name="registered_verification_email_sent">Registered, Verification email has been sent. Please check your email</string>
     <string name="verification_email_not_sent">Registered, BUT Verification email hasn\'t been sent</string>
