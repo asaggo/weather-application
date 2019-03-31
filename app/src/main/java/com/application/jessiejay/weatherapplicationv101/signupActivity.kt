@@ -1,5 +1,6 @@
 package com.application.jessiejay.weatherapplicationv101
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -35,8 +36,11 @@ class signupActivity : AppCompatActivity() {
                 firebaseAuth.createUserWithEmailAndPassword(username,password).addOnCompleteListener { task ->
                     if (task.isSuccessful){
                         sendUserData()
-                        Toast.makeText(this.applicationContext, "Registered successfully",Toast.LENGTH_SHORT).show()
+                        sendEmailVerification()
+                        firebaseAuth.signOut()
                         finish()
+                        val intent = Intent(this,loginActivity::class.java)
+                        startActivity(intent)
                     } else {
                         Toast.makeText(this.applicationContext, "Failed to register", Toast.LENGTH_SHORT).show()
                     }
@@ -61,9 +65,13 @@ class signupActivity : AppCompatActivity() {
     private fun sendEmailVerification(){
         val firebaseUser = firebaseAuth.currentUser
         if(firebaseUser!=null) {
-            firebaseUser.sendEmailVerification().addOnCompleteListener({
-                
-            })
+            firebaseUser.sendEmailVerification().addOnCompleteListener { task ->
+                if(task.isSuccessful) {
+                    Toast.makeText(this,getString(R.string.registered_verification_email_sent), Toast.LENGTH_SHORT).show()
+                }else {
+                    Toast.makeText(this,getString(R.string.verification_email_not_sent), Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 }

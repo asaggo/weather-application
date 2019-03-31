@@ -100,6 +100,15 @@
             android:layout_marginTop="14dp"
             android:textSize="20dp"/>
 
+        <Button
+            android:id="@+id/temp_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toRightOf="@id/guideline"
+            app:layout_constraintRight_toLeftOf="@+id/guideline"
+            app:layout_constraintTop_toBottomOf="@id/temp_min_textview"
+            android:text="temp"/>
+
         <android.support.constraint.Guideline
             android:layout_width="match_parent"
             android:layout_height="match_parent"

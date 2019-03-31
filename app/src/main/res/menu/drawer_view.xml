@@ -10,5 +10,9 @@
             <!--android:id="@+id/drawer_settings"-->
             <!--android:icon="@drawable/ic_android_black_24dp"-->
             <!--android:title="@string/settings" />-->
+        <item
+            android:id="@+id/drawer_map"
+            android:icon="@drawable/places_ic_search"
+            android:title="@string/find_place" />
     </group>
 </menu>
