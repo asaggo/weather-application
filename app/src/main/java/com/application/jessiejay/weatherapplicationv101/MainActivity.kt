@@ -78,7 +78,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
         }
 
         viewModel = ViewModelProviders.of(this).get(WeatherViewModel::class.java)
-        val database = DatabaseHelper(this)
+//        val database = DatabaseHelper(this)
         firebaseAuth = FirebaseAuth.getInstance()
         val permissionCheck = ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.ACCESS_FINE_LOCATION)
         if(permissionCheck != PackageManager.PERMISSION_GRANTED) {
@@ -107,14 +107,10 @@ class MainActivity : AppCompatActivity(), LocationListener {
                     val intent = Intent(applicationContext, loginActivity::class.java)
                     startActivity(intent)
                 }
-//                R.id.drawer_settings ->{
-//                    val intent = Intent(applicationContext, SettingsActivity::class.java)
-//                    startActivity(intent)
-//                    settingsFragment = SettingsFragment()
-//                    supportFragmentManager.beginTransaction().replace(R.id.settings_fragment,settingsFragment).commit()
-//                }
                 R.id.drawer_map ->{
-
+                    finish()
+                    val intent = Intent(applicationContext, FindPlaceActivity::class.java)
+                    startActivity(intent)
                 }
             }
             true

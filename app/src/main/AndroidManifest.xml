@@ -27,6 +27,7 @@
         </activity>
         <activity android:name=".signupActivity" />
         <activity android:name=".SettingsActivity" />
+        <activity android:name=".FindPlaceActivity"></activity>
     </application>
 
 </manifest>
