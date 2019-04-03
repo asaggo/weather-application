@@ -1,5 +1,6 @@
 package com.application.jessiejay.weatherapplicationv101;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -16,9 +17,11 @@ public class CityListDatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_5 = "country";
     public static final String COL_6 = "admin_name";
 
+    public SQLiteDatabase db;
+
     public CityListDatabaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, 1);
-        SQLiteDatabase db = this.getWritableDatabase();
+        db = this.getWritableDatabase();
     }
 
     @Override
@@ -32,11 +35,24 @@ public class CityListDatabaseHelper extends SQLiteOpenHelper {
                 COL_6 + " TEXT)");
     }
 
-
-
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(db);
     }
+
+    public boolean insertData(String city, double latitude, double longitude,
+                              String country, String admin){
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COL_2,city);
+        contentValues.put(COL_3,latitude);
+        contentValues.put(COL_4,longitude);
+        contentValues.put(COL_5,country);
+        contentValues.put(COL_6,admin);
+        long result = db.insert(TABLE_NAME,null,contentValues);
+        return result == -1? false: true;
+    }
+
+
 }

@@ -78,7 +78,6 @@ class MainActivity : AppCompatActivity(), LocationListener {
         }
 
         viewModel = ViewModelProviders.of(this).get(WeatherViewModel::class.java)
-//        val database = DatabaseHelper(this)
         firebaseAuth = FirebaseAuth.getInstance()
         val permissionCheck = ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.ACCESS_FINE_LOCATION)
         if(permissionCheck != PackageManager.PERMISSION_GRANTED) {

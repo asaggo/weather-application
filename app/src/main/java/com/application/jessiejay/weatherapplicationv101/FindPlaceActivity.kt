@@ -3,6 +3,7 @@ package com.application.jessiejay.weatherapplicationv101
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import java.io.BufferedReader
 import java.io.FileReader
 import java.io.InputStream
@@ -24,21 +25,16 @@ class FindPlaceActivity : AppCompatActivity() {
         var line = buffer.readLine()
         val tableName = "locations_table"
         val columns = "city, latitude, longitude, country, admin_name"
-        val str1 = "INSERT INTO $tableName ($columns) values("
-        val str2 = ");"
-
+//        val str1 = "INSERT INTO $tableName ($columns) values("
+//        val str2 = ");"
 
 //        db.beginTransaction()
         while (line != null) {
-            val sb = StringBuilder(str1)
             val str = line.split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-            sb.append("'" + str[0] + "',")
-            sb.append(str[1] + "',")
-            sb.append(str[2] + "',")
-            sb.append(str[3] + "'")
-            sb.append(str[4] + "'")
-            sb.append(str2)
-//            db.execSQL(sb.toString())
+            var isInserted = cityListDatabaseHelper.insertData(str[0],str[1].toDouble(),str[2].toDouble(),str[3],str[4])
+            if(!isInserted){
+                Log.i(TAG,"not inserted")
+            }
             line = buffer.readLine()
         }
 //        db.setTransactionSuccessful()
