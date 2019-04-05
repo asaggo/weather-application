@@ -2,6 +2,7 @@ package com.application.jessiejay.weatherapplicationv101;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -26,8 +27,9 @@ public class CityListDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE " + TABLE_NAME + " (" +
-                COL_1 + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        db.execSQL("CREATE TABLE if not exists " + TABLE_NAME + " (" +
+                COL_1 + " INTEGER PRIMARY KEY, " +
                 COL_2 + " TEXT, " +
                 COL_3 + " REAL, " +
                 COL_4 + " REAL, " +
@@ -41,18 +43,32 @@ public class CityListDatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean insertData(String city, double latitude, double longitude,
+    public boolean insertData(int id,String city, double latitude, double longitude,
                               String country, String admin){
 
         ContentValues contentValues = new ContentValues();
+        contentValues.put(COL_1,id);
         contentValues.put(COL_2,city);
         contentValues.put(COL_3,latitude);
         contentValues.put(COL_4,longitude);
         contentValues.put(COL_5,country);
         contentValues.put(COL_6,admin);
-        long result = db.insert(TABLE_NAME,null,contentValues);
+        long result = db.insertWithOnConflict(TABLE_NAME,null,contentValues,SQLiteDatabase.CONFLICT_REPLACE);
         return result == -1? false: true;
     }
 
+    public Cursor searchData(String input){
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE "+ COL_2 + " like '%"+input+"%'",null);
+        return cursor;
+    }
 
+    public Cursor findCoordinates(String city, String admin, String country){
+        Cursor cursor = db.rawQuery(
+                "SELECT "+ COL_3 + "," + COL_4 +
+                        " FROM " + TABLE_NAME +
+                        " WHERE " + COL_2 + " = '" + city +
+                        "' AND " + COL_6 + " = '" + admin +
+                        "' AND " + COL_5 + " = '" + country + "'", null);
+        return cursor;
+    }
 }

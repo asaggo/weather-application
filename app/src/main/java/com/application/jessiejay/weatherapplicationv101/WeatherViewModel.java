@@ -37,6 +37,7 @@ public class WeatherViewModel extends ViewModel {
         this.temp_min = weatherResponse.main.temp_min;
         this.temp_max = weatherResponse.main.temp_max;
         this.windSpeed = weatherResponse.wind.speed;
+
     }
 
 }

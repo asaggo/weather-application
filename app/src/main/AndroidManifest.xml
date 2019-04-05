@@ -18,16 +18,23 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-        <activity android:name=".loginActivity">
+        <activity android:name=".loginActivity"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".signupActivity" />
-        <activity android:name=".SettingsActivity" />
-        <activity android:name=".FindPlaceActivity"></activity>
+        <activity
+            android:name=".signupActivity"
+            android:noHistory="true"/>
+        <activity
+            android:name=".SettingsActivity"
+            android:noHistory="true"/>
+        <activity
+            android:name=".FindPlaceActivity"
+            android:noHistory="true" />
     </application>
 
 </manifest>

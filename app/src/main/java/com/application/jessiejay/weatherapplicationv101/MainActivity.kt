@@ -1,6 +1,7 @@
 package com.application.jessiejay.weatherapplicationv101
 
 import android.Manifest
+import android.app.Activity
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
@@ -37,6 +38,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
         val CELSIUS_UNIT_TEXT = "°C"
         val FAHRENHEIT_UNIT_API = "imperial"
         val FAHRENHEIT_UNIT_TEXT = "°F"
+        val REQUEST_CODE_FIND_PLACE = 200
     }
 
     //default values : seattle, Fahrenheit
@@ -55,6 +57,12 @@ class MainActivity : AppCompatActivity(), LocationListener {
     private lateinit var currentTemp: TextView
     private lateinit var tempUnitText: TextView
     private lateinit var changeUnitBtn: Button
+    private lateinit var minTemp: TextView
+    private lateinit var humidity:TextView
+
+    private lateinit var backToCurrentLocation: Button
+
+    private lateinit var coordinates: MutableList<Double>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,7 +73,12 @@ class MainActivity : AppCompatActivity(), LocationListener {
         currentDateTime = findViewById(R.id.current_time_textview)
         currentTemp = findViewById(R.id.temp_textview)
         tempUnitText = findViewById(R.id.temp_unit_textview)
+
         changeUnitBtn = findViewById(R.id.change_unit_button)
+        minTemp = findViewById(R.id.temp_min_textview)
+        humidity = findViewById(R.id.humidity_textview)
+        backToCurrentLocation = findViewById(R.id.back_to_current_location_button)
+
         changeUnitBtn.setOnClickListener {
             if(changeUnitBtn.text.equals(FAHRENHEIT_UNIT_TEXT)){
                 unit = FAHRENHEIT_UNIT_API
@@ -74,6 +87,11 @@ class MainActivity : AppCompatActivity(), LocationListener {
                 unit = CELSIUS_UNIT_API
                 changeUnitBtn.text = FAHRENHEIT_UNIT_TEXT
             }
+            getCurrentData()
+        }
+
+        backToCurrentLocation.setOnClickListener{
+            getLocation()
             getCurrentData()
         }
 
@@ -107,14 +125,24 @@ class MainActivity : AppCompatActivity(), LocationListener {
                     startActivity(intent)
                 }
                 R.id.drawer_map ->{
-                    finish()
                     val intent = Intent(applicationContext, FindPlaceActivity::class.java)
-                    startActivity(intent)
+                    startActivityForResult(intent,REQUEST_CODE_FIND_PLACE)
                 }
             }
             true
         }
 
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if(requestCode == REQUEST_CODE_FIND_PLACE){
+            if(resultCode == Activity.RESULT_OK){
+                Toast.makeText(this,"Selected new location successfully",Toast.LENGTH_SHORT).show()
+                lat = data!!.getStringExtra("latitude")
+                lon = data!!.getStringExtra("longitude")
+                getCurrentData()
+            }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -162,6 +190,8 @@ class MainActivity : AppCompatActivity(), LocationListener {
         currentCityName.text = viewModel.cityName
         currentDateTime.text = viewModel.currentTime_str
         currentTemp.text = viewModel.temp.toString()
+        minTemp.text = viewModel.temp_min.toString()
+        humidity.text = viewModel.humidity.toString()
         if(unit.equals(FAHRENHEIT_UNIT_API)){
             tempUnitText.text = FAHRENHEIT_UNIT_TEXT
         } else {
