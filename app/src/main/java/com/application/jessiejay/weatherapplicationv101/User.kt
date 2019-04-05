@@ -5,4 +5,7 @@ class User {
     constructor(name:String){
         this.name = name
     }
+    constructor(){
+        this.name = ""
+    }
 }

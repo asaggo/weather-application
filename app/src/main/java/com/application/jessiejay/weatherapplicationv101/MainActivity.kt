@@ -20,9 +20,14 @@ import android.support.v7.app.ActionBar
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -52,13 +57,18 @@ class MainActivity : AppCompatActivity(), LocationListener {
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var locationManager: LocationManager
 //    private lateinit var locationTextView: TextView
+    private lateinit var userName: TextView
+    private lateinit var weatherImage: ImageView
     private lateinit var currentCityName: TextView
     private lateinit var currentDateTime: TextView
     private lateinit var currentTemp: TextView
     private lateinit var tempUnitText: TextView
     private lateinit var changeUnitBtn: Button
     private lateinit var minTemp: TextView
-    private lateinit var humidity:TextView
+    private lateinit var humidity: TextView
+    private lateinit var cloud: TextView
+
+    private lateinit var firebaseDatabase: FirebaseDatabase
 
     private lateinit var backToCurrentLocation: Button
 
@@ -69,6 +79,8 @@ class MainActivity : AppCompatActivity(), LocationListener {
         setContentView(R.layout.activity_main)
 
 //        locationTextView = findViewById(R.id.current_location)
+        userName = findViewById(R.id.user_name_textview)
+        weatherImage = findViewById(R.id.weather_image)
         currentCityName = findViewById(R.id.city_name_textview)
         currentDateTime = findViewById(R.id.current_time_textview)
         currentTemp = findViewById(R.id.temp_textview)
@@ -77,6 +89,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
         changeUnitBtn = findViewById(R.id.change_unit_button)
         minTemp = findViewById(R.id.temp_min_textview)
         humidity = findViewById(R.id.humidity_textview)
+        cloud = findViewById(R.id.cloud_value_textview)
         backToCurrentLocation = findViewById(R.id.back_to_current_location_button)
 
         changeUnitBtn.setOnClickListener {
@@ -97,6 +110,19 @@ class MainActivity : AppCompatActivity(), LocationListener {
 
         viewModel = ViewModelProviders.of(this).get(WeatherViewModel::class.java)
         firebaseAuth = FirebaseAuth.getInstance()
+        firebaseDatabase = FirebaseDatabase.getInstance()
+
+        val databaseReference = firebaseDatabase.getReference(firebaseAuth.uid!!)
+        val addValueEventListener = databaseReference.addValueEventListener(object:ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {
+            }
+
+            override fun onDataChange(p0: DataSnapshot) {
+                val user = p0.getValue(User::class.java)
+                userName.text = "Welcome, " + user!!.name
+            }
+        })
+
         val permissionCheck = ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.ACCESS_FINE_LOCATION)
         if(permissionCheck != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 700)
@@ -191,12 +217,21 @@ class MainActivity : AppCompatActivity(), LocationListener {
         currentDateTime.text = viewModel.currentTime_str
         currentTemp.text = viewModel.temp.toString()
         minTemp.text = viewModel.temp_min.toString()
-        humidity.text = viewModel.humidity.toString()
+        humidity.text = viewModel.humidity.toString() + " %"
+        cloud.text = viewModel.cloud.toString() + " %"
+        if(viewModel.cloud > 50){
+            weatherImage.setImageResource(R.drawable.ic_cloud_black_24dp)
+        } else {
+            weatherImage.setImageResource(R.drawable.ic_wb_sunny_24dp)
+        }
+
         if(unit.equals(FAHRENHEIT_UNIT_API)){
             tempUnitText.text = FAHRENHEIT_UNIT_TEXT
         } else {
             tempUnitText.text = CELSIUS_UNIT_TEXT
         }
+
+
 
     }
 

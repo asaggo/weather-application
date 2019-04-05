@@ -9,6 +9,7 @@ import java.util.Date;
 public class WeatherViewModel extends ViewModel {
     public String cityName;
     public Clouds clouds;
+    public float cloud;
     public float temp;
     public float humidity;
     public float pressure;
@@ -29,6 +30,7 @@ public class WeatherViewModel extends ViewModel {
     public void setValues(WeatherResponse weatherResponse) {
         this.cityName = weatherResponse.name;
         this.clouds = weatherResponse.clouds;
+        this.cloud = clouds.all;
         this.coord = weatherResponse.coord;
         this.countryName = weatherResponse.sys.country;
         this.humidity = weatherResponse.main.humidity;
